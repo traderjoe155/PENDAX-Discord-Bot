@@ -1,0 +1,25 @@
+{
+  "name": "pendax-discord-bot",
+  "version": "1.0.0",
+  "description": "framework for gathering data via PENDAX and sending to Discord",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/traderjoe155/PENDAX-Discord-Bot.git"
+  },
+  "author": "traderjoe155",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/traderjoe155/PENDAX-Discord-Bot/issues"
+  },
+  "homepage": "https://github.com/traderjoe155/PENDAX-Discord-Bot#readme",
+  "dependencies": {
+    "axios": "^1.2.2",
+    "dotenv": "^16.0.3",
+    "pendax": "github:compendiumfi/pendax"
+  }
+}
