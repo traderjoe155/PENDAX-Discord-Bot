@@ -18,8 +18,8 @@
   },
   "homepage": "https://github.com/traderjoe155/PENDAX-Discord-Bot#readme",
   "dependencies": {
+    "@compendiumfi/pendax": "^1.1.5",
     "axios": "^1.2.2",
-    "dotenv": "^16.0.3",
-    "pendax": "github:compendiumfi/pendax"
+    "dotenv": "^16.0.3"
   }
 }

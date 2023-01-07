@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import axios from "axios";
-import { createExchange } from "pendax/package/exchanges/exchange.js";
+import { createExchange } from "@compendiumfi/pendax/exchanges/exchange.js";
 
 let discHook = process.env.DISCHOOK;
 let publicExchange = createExchange({
@@ -21,9 +21,21 @@ let timeDelay = process.env.TIMEDELAY;
 //         marginType: "usdt"
 //     });
 
-async function getOpenInterest(publicExchange, options) {
+// get open interest
+async function getOpenInterest(exchange, options) {
   try {
     let result = await publicExchange.getOpenInterest(options);
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+// get liquidations
+async function getLiqOrders(exchange, options) {
+  try {
+    let result = await publicExchange.getLiqOrders(options);
+    console.log(result);
     return result;
   } catch (error) {
     console.log(error.message);
@@ -52,14 +64,15 @@ async function sendDiscordPost(options) {
   }
 }
 
+//get OI and post to discord
 async function main(i) {
   let result = await getOpenInterest(publicExchange, {
     instType: process.env.INSTTYPE,
     instId: process.env.INSTID,
   });
-  let openInterest = result.data.data[0].oi;
+  let openInterest = result.data[0].oi;
   let oiFormatted = parseFloat(openInterest).toLocaleString();
-  let market = result.data.data[0].instId;
+  let market = result.data[0].instId;
   console.log(market);
   console.log(oiFormatted);
   let data =
@@ -77,4 +90,32 @@ async function main(i) {
   }, timeDelay);
 }
 
-main(0);
+// get liquidations and post to discord
+
+// async function main(i) {
+//     let result = await getLiqOrders(publicExchange, {
+//       instType: process.env.INSTTYPE,
+//       instId: process.env.INSTID
+//     });
+//     let liqs = result.data[0].totalLoss;
+
+//     let market = result.data[0].instId;
+//     console.log(market);
+
+//     console.log(liqs);
+//     let data =
+//       "`" +
+//       new Date().toLocaleString() +
+//       "`" +
+//       "\n**Market:** " +
+//       market +
+//       "\n**Liquidations Today:** " +
+//       liqs;
+//     await sendDiscordPost(data);
+//     console.log(data);
+//     setTimeout(() => {
+//       main(++i);
+//     }, timeDelay);
+//   }
+
+// main(0);
