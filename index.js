@@ -65,24 +65,58 @@ async function sendDiscordPost(options) {
 }
 
 //get OI and post to discord
+
+// async function main(i) {
+//   let result = await getOpenInterest(publicExchange, {
+//     instType: process.env.INSTTYPE,
+//     instId: process.env.INSTID,
+//   });
+//   let openInterest = result.data[0].oi;
+//   let oiFormatted = parseFloat(openInterest).toLocaleString();
+//   let market = result.data[0].instId;
+//   console.log(market);
+//   console.log(oiFormatted);
+//   let data =
+//     "`" +
+//     new Date().toLocaleString() +
+//     "`" +
+//     "\n**Market:** " +
+//     market +
+//     "\n**OpenInterest:** " +
+//     oiFormatted;
+//   await sendDiscordPost(data);
+//   console.log(data);
+//   setTimeout(() => {
+//     main(++i);
+//   }, timeDelay);
+// }
+
+// get liquidations and post to discord
+
 async function main(i) {
-  let result = await getOpenInterest(publicExchange, {
+  let result = await getLiqOrders(publicExchange, {
     instType: process.env.INSTTYPE,
-    instId: process.env.INSTID,
+    state: "filled",
+    uly: process.env.ULY,
   });
-  let openInterest = result.data[0].oi;
-  let oiFormatted = parseFloat(openInterest).toLocaleString();
+  let liqs = result.data[0].totalLoss;
+  let latestLiqs = result.data[0].details;
+  let latestLiqsFormatted = JSON.stringify(latestLiqs, null, 4);
+  console.log(liqs);
   let market = result.data[0].instId;
   console.log(market);
-  console.log(oiFormatted);
+
+  console.log(liqs);
   let data =
     "`" +
     new Date().toLocaleString() +
     "`" +
     "\n**Market:** " +
     market +
-    "\n**OpenInterest:** " +
-    oiFormatted;
+    "\n**Liquidations Today:** " +
+    liqs +
+    "\n**Latest Liquidation Details:** " +
+    latestLiqsFormatted;
   await sendDiscordPost(data);
   console.log(data);
   setTimeout(() => {
@@ -90,32 +124,4 @@ async function main(i) {
   }, timeDelay);
 }
 
-// get liquidations and post to discord
-
-// async function main(i) {
-//     let result = await getLiqOrders(publicExchange, {
-//       instType: process.env.INSTTYPE,
-//       instId: process.env.INSTID
-//     });
-//     let liqs = result.data[0].totalLoss;
-
-//     let market = result.data[0].instId;
-//     console.log(market);
-
-//     console.log(liqs);
-//     let data =
-//       "`" +
-//       new Date().toLocaleString() +
-//       "`" +
-//       "\n**Market:** " +
-//       market +
-//       "\n**Liquidations Today:** " +
-//       liqs;
-//     await sendDiscordPost(data);
-//     console.log(data);
-//     setTimeout(() => {
-//       main(++i);
-//     }, timeDelay);
-//   }
-
-// main(0);
+main(0);
